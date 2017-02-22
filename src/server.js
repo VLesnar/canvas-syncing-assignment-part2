@@ -27,8 +27,8 @@ io.on('connection', (socket) => {
       y: data.y,
       height: 100,
       width: 100,
-	  time: data.time,
-		coords: data.coords,
+      time: data.time,
+      coords: data.coords,
     };
     io.sockets.in('room1').emit('update', square);
   });
