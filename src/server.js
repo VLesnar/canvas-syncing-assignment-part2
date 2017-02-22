@@ -17,10 +17,26 @@ const app = http.createServer(onRequest).listen(port);
 const io = socketio(app);
 
 io.on('connection', (socket) => {
-  socket.join('room1');
+  const sock = socket;
 
-  socket.on('disconnect', () => {
-    socket.leave('room1');
+  sock.join('room1');
+
+  sock.on('setShape', (data) => {
+    const square = {
+      x: data.x,
+      y: data.y,
+      height: 100,
+      width: 100,
+	  time: data.time,
+		coords: data.coords,
+    };
+    io.sockets.in('room1').emit('update', square);
+  });
+
+  sock.on('disconnect', () => {
+    io.sockets.in('room1').emit('left', sock.shape);
+
+    sock.leave('room1');
   });
 });
 
